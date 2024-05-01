@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bulky.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -9,11 +10,12 @@ namespace Bulky.DataAccess.Repository.IRepository
 {
     public interface IRepository<T> where T : class
     {
-        IEnumerable<T> GetAll(String? includeProperties = null);
-       T Get(Expression<Func<T,bool>> filter, String? includeProperties = null);
+        IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter = null, String? includeProperties = null);
+        T Get(Expression<Func<T, bool>> filter, String? includeProperties = null, bool tracked = false);
         void Add(T entity);
         void Remove(T entity);
         void RemoveRange(IEnumerable<T> entity);
 
     }
+
 }

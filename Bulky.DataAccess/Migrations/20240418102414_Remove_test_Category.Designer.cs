@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bulky.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240403150456_AddIdentityTables")]
-    partial class AddIdentityTables
+    [Migration("20240418102414_Remove_test_Category")]
+    partial class Remove_test_Category
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,26 +44,6 @@ namespace Bulky.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            DisplayOrder = 1,
-                            Name = "Action"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            DisplayOrder = 2,
-                            Name = "SciFi"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            DisplayOrder = 3,
-                            Name = "History"
-                        });
                 });
 
             modelBuilder.Entity("Bulky.Models.Company", b =>
@@ -474,7 +454,7 @@ namespace Bulky.DataAccess.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Bulky.Models.ApplicationUser", b =>
+            modelBuilder.Entity("BulkyBook.Models.ApplicationUser", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
@@ -564,7 +544,7 @@ namespace Bulky.DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Bulky.Models.ApplicationUser", b =>
+            modelBuilder.Entity("BulkyBook.Models.ApplicationUser", b =>
                 {
                     b.HasOne("Bulky.Models.Company", "Company")
                         .WithMany()
