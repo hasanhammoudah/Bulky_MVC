@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Bulky.DataAccess.Data;
 using Bulky.DataAccess.Repository.IRepository;
+using Bulky.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bulky.DataAccess.Repository
@@ -18,9 +19,10 @@ namespace Bulky.DataAccess.Repository
             this.dbSet = _db.Set<T>();
             _db.Products.Include(u => u.Category).Include(u=>u.CategoryId);
         }
-     
 
-   
+
+    
+
 
         public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter, String? includeProperties =null)
         {
@@ -40,7 +42,8 @@ namespace Bulky.DataAccess.Repository
                 }
             }
 
-            return dbSet.ToList();
+
+            return query.ToList();
         }
 
         public T Get(Expression<Func<T, bool>> filter, String? includeProperties = null, bool tracked = false)
