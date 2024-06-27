@@ -12,13 +12,13 @@ using Microsoft.EntityFrameworkCore;
 namespace BulkyWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles =SD.ROLE_ADMIN)]
+    [Authorize(Roles = SD.ROLE_ADMIN)]
     public class ProductController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IWebHostEnvironment _webHostEnviroment;
 
-        public ProductController(IUnitOfWork unitOfWork,IWebHostEnvironment webHostEnvironment)
+        public ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
         {
             _unitOfWork = unitOfWork;
             _webHostEnviroment = webHostEnvironment;
@@ -26,8 +26,8 @@ namespace BulkyWeb.Areas.Admin.Controllers
 
         public IActionResult Index()
         {
-            List<Product> objProductList = _unitOfWork.Product.GetAll(includeProperties:"Category").ToList();
-          
+            List<Product> objProductList = _unitOfWork.Product.GetAll(includeProperties: "Category").ToList();
+
             return View(objProductList);
         }
         public IActionResult Upsert(int? id)
@@ -47,7 +47,7 @@ namespace BulkyWeb.Areas.Admin.Controllers
                 }),
                 Product = new Product()
             };
-            if(id ==null || id == 0)
+            if (id == null || id == 0)
             {
                 // create
                 return View(productVM);
@@ -62,7 +62,7 @@ namespace BulkyWeb.Areas.Admin.Controllers
             }
         }
         [HttpPost]
-        public IActionResult Upsert(ProductVM productVM,IFormFile? file)
+        public IActionResult Upsert(ProductVM productVM, IFormFile? file)
         {
 
             //         if (productVM.Name!=null && productVM.Name.ToLower() == "test")
@@ -85,14 +85,14 @@ namespace BulkyWeb.Areas.Admin.Controllers
                         }
                     }
 
-                    using(var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
+                    using (var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
                     {
                         file.CopyTo(fileStream);
                     }
                     productVM.Product.ImageUrl = @"\images\product\" + fileName;
 
                 }
-                if(productVM.Product.Id == 0)
+                if (productVM.Product.Id == 0)
                 {
                     _unitOfWork.Product.Add(productVM.Product);
                 }
@@ -108,51 +108,19 @@ namespace BulkyWeb.Areas.Admin.Controllers
 
             }
             else
-            {  
+            {
                 productVM.CategoryList = _unitOfWork.Category.GetAll().Select(u => new SelectListItem
                 {
                     Text = u.Name,
                     Value = u.Id.ToString()
                 });
-                };
-                return View(productVM);
-            
-          
+            };
+            return View(productVM);
+
+
 
         }
 
-      
-     
-        #region API CALLS
-        [HttpGet]
-        public IActionResult GetAll(int id)
-        {
-            List<Product> objProductList = _unitOfWork.Product.GetAll(includeProperties: "Category").ToList();
-            return Json(new { data = objProductList });
-        }
-
-
-        [HttpDelete]
-        public IActionResult Delete(int id)
-        {
-            var productToBeDeleted = _unitOfWork.Product.Get(u => u.Id == id);
-            if ((productToBeDeleted == null))
-            {
-                return Json(new { success = false, message="Error while deleting" });
-
-            }
-            var oldImagePath = Path.Combine(_webHostEnviroment.WebRootPath,productToBeDeleted.ImageUrl.TrimStart('\\'));
-            if (System.IO.File.Exists(oldImagePath))
-            {
-                System.IO.File.Delete(oldImagePath);
-            }
-            _unitOfWork.Product.Remove(productToBeDeleted);
-            _unitOfWork.Save();
-
-            return Json(new { success = false, message = "Error while deleting" });
-
-        }
-        #endregion
 
 
     }

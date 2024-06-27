@@ -13,7 +13,6 @@ namespace Bulky.Utility
         public const string ROLE_ADMIN = "Admin";
         public const string ROLE_Employee = "Employee";
 
-
 		public const string StatusPending = "Pending";
 		public const string StatusApproved = "Approved";
 		public const string StatusInProcess = "Processing";
